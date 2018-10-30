@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Test," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="yihome" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="UI测试UI 测试是为了确保对于用户的UI动作，app能返回正确的UI输出。根据实际实现方案大体可以分为两种：  End-To-End（E2E）UI测试，直接通过客户端和后台服务器的交互测试整个系统，普通操作UI，通过网络获取数据，验证UI数据。实现简单，但是存在测试速度缓慢，可能因为网络导致测试用例不通过的问题。 封闭UI测试，测试方法使得测试不需要外部依赖和网络请求，使用Mock Server">
+<meta name="keywords" content="Android,Test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndrodUI测试入门">
+<meta property="og:url" content="http://haojen.github.io/2018/03/05/AndrodUI测试入门/index.html">
+<meta property="og:site_name" content="yihome">
+<meta property="og:description" content="UI测试UI 测试是为了确保对于用户的UI动作，app能返回正确的UI输出。根据实际实现方案大体可以分为两种：  End-To-End（E2E）UI测试，直接通过客户端和后台服务器的交互测试整个系统，普通操作UI，通过网络获取数据，验证UI数据。实现简单，但是存在测试速度缓慢，可能因为网络导致测试用例不通过的问题。 封闭UI测试，测试方法使得测试不需要外部依赖和网络请求，使用Mock Server">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-24T07:39:47.886Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AndrodUI测试入门">
+<meta name="twitter:description" content="UI测试UI 测试是为了确保对于用户的UI动作，app能返回正确的UI输出。根据实际实现方案大体可以分为两种：  End-To-End（E2E）UI测试，直接通过客户端和后台服务器的交互测试整个系统，普通操作UI，通过网络获取数据，验证UI数据。实现简单，但是存在测试速度缓慢，可能因为网络导致测试用例不通过的问题。 封闭UI测试，测试方法使得测试不需要外部依赖和网络请求，使用Mock Server">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haojen.github.io/2018/03/05/AndrodUI测试入门/"/>
+
+
+
+
+
+  <title>AndrodUI测试入门 | yihome</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yihome</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haojen.github.io/2018/03/05/AndrodUI测试入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="houyi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yihome">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AndrodUI测试入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T17:11:28+08:00">
+                2018-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/05/AndrodUI测试入门/" class="leancloud_visitors" data-flag-title="AndrodUI测试入门">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="UI测试"><a href="#UI测试" class="headerlink" title="UI测试"></a>UI测试</h2><p>UI 测试是为了确保对于用户的UI动作，app能返回正确的UI输出。根据实际实现方案大体可以分为两种：</p>
+<ul>
+<li>End-To-End（E2E）UI测试，直接通过客户端和后台服务器的交互测试整个系统，普通操作UI，通过网络获取数据，验证UI数据。实现简单，但是存在测试速度缓慢，可能因为网络导致测试用例不通过的问题。</li>
+<li>封闭UI测试，测试方法使得测试不需要外部依赖和网络请求，使用Mock Server或者其他方式替代真实的网络请求，只验证UI输出的正确性。</li>
+</ul>
+<h2 id="UI测试框架"><a href="#UI测试框架" class="headerlink" title="UI测试框架"></a>UI测试框架</h2><p>Android之前比较流行的UI测试框架有<a href="https://github.com/RobotiumTech/robotium" target="_blank" rel="noopener">robotium</a>、<a href="http://appium.io/?yyue=a21bo.50862.201879" target="_blank" rel="noopener">Appium</a>、<a href="">uiautomator</a>、<a href="http://calaba.sh/?yyue=a21bo.50862.201879" target="_blank" rel="noopener">Calabash</a>、<a href="https://developer.android.com/training/testing/espresso/index.html" target="_blank" rel="noopener">Espresso</a>,但是其中Espresso作为Google官方开源的UI测试框架，以其官方的身份、完整的使用文档以及简单的使用方法，快速成为UI测试框架中的主流，本文就是以Espresso框架为主要测试框架。</p>
+<h2 id="Espresso"><a href="#Espresso" class="headerlink" title="Espresso"></a>Espresso</h2><h3 id="介绍及集成"><a href="#介绍及集成" class="headerlink" title="介绍及集成"></a>介绍及集成</h3><p>Espresso 测试框架提供了一组 API 来构建 UI 测试，用于测试应用中的用户流。利用这些 API，您可以编写简洁、运行可靠的自动化 UI 测试。Espresso 非常适合编写白盒自动化测试，其中测试代码将利用所测试应用的实现代码详情。<br>目前Espresso最新的版本已经出道3.0.1，使用AS创建的工程，默认已经集成了2.2.2版本的Espresso，但是如果要集成最新版本的Espresso库，需要在仓库配置中添加对应仓库地址：</p>
+<pre><code>allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url &quot;https://maven.google.com&quot;
+            //Espresso3.0.1所在仓库地址
+        }
+    }
+}
+</code></pre><p>默认集成的Espresso包espresso-core及其相关依赖包，足以完成一般性的UI测试，除此之外Espresso还有一些扩展包，用于完成一些特殊的测试场景:</p>
+<ul>
+<li>espresso-web 提供了对WebView测试的相关支持</li>
+<li>espresso-contrib 提供了对DatePicker, RecyclerView 和 Drawer等控件的特有动作、无障碍以及CountingIdlingResource的支持</li>
+<li>espresso-intents 用于校验多app测试中intent的正确性</li>
+<li>espresso-idling-resource（已经包含在core的依赖中）用于处理异步线程同步问题</li>
+</ul>
+<p>如果测试过程中不需要上述的扩展功能，则只需要添加core的依赖</p>
+<pre><code>dependencies {
+    androidTestCompile(&apos;com.android.support.test.espresso:espresso-core:3.0.1&apos;, {
+        exclude group: &apos;com.android.support&apos;, module: &apos;support-annotations&apos;
+        //不导入依赖中的support-annotations，避免出现依赖冲突，会使用用户自己导入的包
+    })
+}
+</code></pre><p>其余诸如runner，rules包都被core依赖，会自动导入，没有必要手动导入，以免导入版本不正确引起其他问题，除了上面描述的相关库，Espresso还依赖了JUnit和Hamcrest等其他测试辅助框架。</p>
+<h3 id="EspressoUI测试的重要对象"><a href="#EspressoUI测试的重要对象" class="headerlink" title="EspressoUI测试的重要对象"></a>EspressoUI测试的重要对象</h3><ul>
+<li><strong><a href="https://developer.android.com/reference/android/support/test/espresso/Espresso.html" target="_blank" rel="noopener"><code>Espresso</code></a></strong> Espresso框架的入口类，提供了一些静态方法，便于开始整个测试代码，它提供了类似onView和onData这种方法获取一个可交互的对象ViewInteraction，或者直接进行一个例如页面返回的顶层操作。</li>
+<li><strong><a href="https://developer.android.com/reference/android/support/test/espresso/matcher/ViewMatchers.html" target="_blank" rel="noopener"><code>ViewMatchers</code></a></strong> 定义了一系列静态方法用于根据不同条件返回Matcher&lt;? super View&gt;对象，作为参数传递给onView()。</li>
+<li><strong><a href="https://developer.android.com/reference/android/support/test/espresso/action/ViewActions.html" target="_blank" rel="noopener"><code>ViewActions</code></a></strong> view的操作行为例如click()，最为ViewInteraction.perform()的参数用于对指定View的进行对应操作。</li>
+<li><strong><a href="https://developer.android.com/reference/android/support/test/espresso/assertion/ViewAssertions.html" target="_blank" rel="noopener"><code>ViewAssertions</code></a></strong> 作为ViewInteraction.check()的参数，判断view的输出是否正确</li>
+<li><strong><a href="https://developer.android.com/reference/android/support/test/rule/ActivityTestRule.html" target="_blank" rel="noopener"><code>ActivityTestRule</code></a></strong> 提供了测试单个Activity的功能，当它的launchActivity设置为true时，它会在每个使用<code>@Test</code>注释的方法前和所有注释者<code>@Before</code>的方法前启动。同时可以通过ActivityTestRule对象获取对应Activity的对象。</li>
+</ul>
+<p>一个简单的代码示例如下：</p>
+<pre><code>@RunWith(AndroidJUnit4.class)
+public class LoginTest {
+    @Rule
+    public ActivityTestRule&lt;LoginActivity&gt; mActivityRule =
+            new ActivityTestRule(LoginActivity.class);
+
+    @Test
+    public void login() throws Exception {
+        onView(withId(R.id.et_login_number)).perform(click(),replaceText(&quot;17720380994&quot;),closeSoftKeyboard());
+        onView(withId(R.id.btn_login_next)).perform(click());
+        onView(withId(R.id.et_password)).perform(click(),replaceText(&quot;aa123456&quot;),closeSoftKeyboard());
+        onView(withId(R.id.btn_login)).perform(click());
+        onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
+        onView(allOf(instanceOf(ImageButton.class),withParent(withId(R.id.toolbar)),isDisplayed())).perform(click());
+        onView(withId(R.id.tv_phone_number)).check(matches(withText(&quot;17720380994&quot;)));
+        onView(IsInstanceOf.&lt;View&gt;instanceOf(ScrollView.class)).perform(swipeUp());
+        onView(withId(R.id.tv_exit)).perform(click());
+        onView(withText(R.string.exit_login_confirm)).check(matches(isDisplayed()));
+        onView(withId(R.id.tv_ok)).perform(click());
+        onView(withId(R.id.et_login_number)).check(matches(isDisplayed()));
+    }
+}
+</code></pre><p>总体来说UI测试的过程就是：<strong>找到某个元素，做一些操作，检查结果</strong>。</p>
+<h3 id="寻找View"><a href="#寻找View" class="headerlink" title="寻找View"></a>寻找View</h3><p>Espresso中定位View主要有两种，通过页面显示的View特征（onView）和通过数据内容（onData），其中onView用于普通场景，onData用于adapterView这种可能没有渲染的view，但是两者都是基于hamcrest的matcher来进行，本质是相同的不同的是匹配规则</p>
+<h4 id="ViewMathcer"><a href="#ViewMathcer" class="headerlink" title="ViewMathcer"></a>ViewMathcer</h4><p><code>ViewMathcer</code>实质上提供了很多Matcher对象，主要用于配合OnView匹配控件，这些Matcher同时可以配合hamcrest中的matcher一起使用，效果更好。常用的Matcher如下</p>
+<ul>
+<li><code>withId()</code> <code>onView(withId(R.id.tv_ok))</code><br>直接通过id定位指定的的View，简单粗暴，但是非常实用。</li>
+<li><code>isAssignableFrom()</code> <code>onView(isAssignableFrom(ScrollView.class))</code>通过对象类型判断</li>
+<li><code>isDisplayed()</code>  <code>onView(allOf(isDisplayed(),isAssignableFrom(ScrollView.class)))</code> 通过是否显示判断，通常和其他matcher配合(<code>allOf</code>是hamcrest库重的方法，用于匹配多个matcher，类似的还有<code>anyOf</code>)</li>
+<li><code>isEnabled()</code></li>
+<li><code>isFocusable()</code><br>……</li>
+</ul>
+<p><code>ViewMathcer</code>中几乎把所有的View属性都定义了对应的matcher，需要的可以自行查阅源码或文档。</p>
+<h4 id="DataInteraction"><a href="#DataInteraction" class="headerlink" title="DataInteraction"></a>DataInteraction</h4><p><code>DataInteraction</code> 是onData方法的返回值，因为onData方法匹配出的不直接就是View，它匹配的是一个数据集合，只有我们想要进行具体的View操作时，Espresso才会把它转化为View。<br>​<br>     onData(instanceOf(Account.class))<br>Espresso没有为<code>onData</code>定义Matcher，基本都是使用hamcrest中定义的matcher或者自定义matcher</p>
+<h5 id="自定义Matcher"><a href="#自定义Matcher" class="headerlink" title="自定义Matcher"></a>自定义Matcher</h5><p>一般自定义Matcher都继承<code>TypeSafeMatcher</code>，需要实现的方法如下</p>
+<pre><code>public class CallInfoMatcher extends TypeSafeMatcher&lt;CallInfo&gt; {
+    @Override
+    public void describeTo(Description description) {
+        //匹配失败时的描述，用于描述具体的匹配失败信息
+    }
+
+    @Override
+    protected boolean matchesSafely(CallInfo item) {
+        //具体的匹配过程
+        return false;
+    }
+
+}
+</code></pre><h3 id="对View的操作"><a href="#对View的操作" class="headerlink" title="对View的操作"></a>对View的操作</h3><p>View的操作都是在<code>ViewInteraction</code>上进行的。<code>ViewInteraction</code>也就是<code>onView</code>的返回值对象，用于对于具体的View进行操作（<code>DataInteraction</code>的操作也是转换为ViewInteraction后进行的），<code>ViewInteraction</code>提供了如下方法来对相应的元素做操作：</p>
+<pre><code>public ViewInteraction perform(final ViewAction... viewActions) {}
+</code></pre><p>具体的操作通过<code>ViewAction</code>定义，连续操作可以链式调用或者作为参数顺序排列。</p>
+<h4 id="ViewAction"><a href="#ViewAction" class="headerlink" title="ViewAction"></a>ViewAction</h4><p><code>ViewAction</code>是espresso中定义的针对View操作的接口类型。<code>ViewAction</code>中实现主要在ViewActions类中通过静态方法提供。常见的action如下</p>
+<ul>
+<li><code>click()</code></li>
+<li><code>closeSoftKeyboard()</code></li>
+<li><code>replaceText()</code><br>……</li>
+</ul>
+<p>除去ViewActions提供的较为通用的操作方法，Espresso还提供了很多ViewAction的子类用于完成不同View的特定操作。     </p>
+<blockquote>
+<p>ViewAction是在View匹配成功的基础上进行的匹配失败或者匹配不唯一都会导致测试不通过，同时Action与View类型不匹配也会失败</p>
+</blockquote>
+<h3 id="校验结果"><a href="#校验结果" class="headerlink" title="校验结果"></a>校验结果</h3><p>测试最重要的一步就是校验结果的正确性，<code>ViewInteraction</code>提供了<code>check()</code>方法用于校验正确性</p>
+<pre><code>public ViewInteraction check(final ViewAssertion viewAssert) {
+    ......
+}
+</code></pre><p>和<code>perform()</code>方法类似，<code>check()</code>也是可以链式调用多次校验。</p>
+<h4 id="ViewAssertion"><a href="#ViewAssertion" class="headerlink" title="ViewAssertion"></a>ViewAssertion</h4><p><code>ViewAssertion</code>是espresso中定义的用于校验View状态的接口类型，同样<code>ViewAssertion</code>也主要由<code>ViewAssertions</code>中的静态方法提供。其中主要使用的就是<code>matches()</code>方法</p>
+<pre><code>public static ViewAssertion matches(final Matcher&lt;? super View&gt; viewMatcher) {
+    return new MatchesViewAssertion(checkNotNull(viewMatcher));
+}
+</code></pre><p>其中参数viewMatcher就是前面用于匹配View的<code>ViewMatcher</code>。</p>
+<h3 id="异步问题"><a href="#异步问题" class="headerlink" title="异步问题"></a>异步问题</h3><p>Espresso提供了大量的同步机制，这些机制主要针对于主线层的MQ，但是Espresso对于其他的异步操作是无感知的，如果View的显示依赖于网络数据，很有可能就会导致测试用例不通过，因此需要使用前面使用的<code>espresso-idling-resource</code>来保证Espresso在异步线程的可靠性。</p>
+<p><code>espresso-idling-resource</code>依赖添加如下</p>
+<pre><code>compile(&quot;com.android.support.test.espresso:espresso-idling-resource:3.0.1&quot;) {
+    exclude module: &apos;support-annotations&apos;
+}
+androidTestCompile(&quot;com.android.support.test.espresso:espresso-idling-resource:3.0.1&quot;) {
+    exclude module: &apos;support-annotations&apos;
+}
+//由于Espresso对与异步线程无感知，我们需要在代码中主动使用IdlingResource，因此需要使用compile依赖。
+</code></pre><h3 id="IdlingResource"><a href="#IdlingResource" class="headerlink" title="IdlingResource"></a>IdlingResource</h3><p>Espresso主要通过<code>IdlingResource</code>这个接口类型完成对异步资源的感知，主要方法如下</p>
+<pre><code>public interface IdlingResource {
+    //用于标识对于的异步资源
+    public String getName();
+    //返回目前资源是否可用(闲置)，
+    public boolean isIdleNow();
+    //Espresso会注册此回掉，需要判断资源可用时主动调用
+    public void registerIdleTransitionCallback(ResourceCallback callback);
+    public interface ResourceCallback {
+        public void onTransitionToIdle();
+    }
+}
+</code></pre><p>Espresso提供了几个<code>IdlingResource</code>的实现类，可以直接使用：</p>
+<ul>
+<li><a href="https://developer.android.com/reference/android/support/test/espresso/idling/CountingIdlingResource.html" target="_blank" rel="noopener">CountingIdlingResource</a> 为资源提供了一个简单的使用计数，当count为0时资源为闲置状态。</li>
+<li><a href="https://developer.android.com/reference/android/support/test/espresso/idling/net/UriIdlingResource.html" target="_blank" rel="noopener">UriIdlingResource</a> 类似<code>CountingIdlingResource</code>,但是count为0时资源不会立即为闲置状态。</li>
+<li><a href="https://developer.android.com/reference/android/support/test/espresso/idling/concurrent/IdlingThreadPoolExecutor.html" target="_blank" rel="noopener">IdlingThreadPoolExecutor</a>  一个有<code>IdlingResource</code>功能的<code>ThreadPoolExecutor</code>。</li>
+<li><a href="https://developer.android.com/reference/android/support/test/espresso/idling/concurrent/IdlingScheduledThreadPoolExecutor.html" target="_blank" rel="noopener">IdlingScheduledThreadPoolExecutor</a> em.. 同上</li>
+</ul>
+<p>我们借<code>CountingIdlingResource</code>来了解下<code>IdlingResource</code>的主要用法，<code>CountingIdlingResource</code>主要提供的两个共有方法供我们使用</p>
+<ul>
+<li><code>increment()</code>计数加一</li>
+<li><code>decrement()</code>计数减一，为0时调用<code>onTransitionToIdle()</code></li>
+</ul>
+<p>例如使用网络请求的场景，发起请求时<code>increment()</code>表示资源被占用，请求结束时<code>decrement()</code>，表示资源被释放。同时还需要在测试代码中注册对应资源</p>
+<pre><code>IdlingRegistry.getInstance().register(idlingResource);
+</code></pre><p><code>IdlingResource</code>解决了异步代码的问题，但是依旧存在问题，我们在业务逻辑代码中创建<code>IdlingResource</code>对象，同时在需要的地方去改变它的状态，然后在测试代码中使用。这无疑是为了测试而给正常的业务代码增加了不必要的逻辑。</p>
+<p>未完待续～</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Test/" rel="tag"># Test</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/11/Android权限管理/" rel="prev" title="Android权限管理">
+                Android权限管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="houyi" />
+            
+              <p class="site-author-name" itemprop="name">houyi</p>
+              <p class="site-description motion-element" itemprop="description">侯易在 Github 上的个人博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yihome" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yihome92628@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UI测试"><span class="nav-number">1.</span> <span class="nav-text">UI测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI测试框架"><span class="nav-number">2.</span> <span class="nav-text">UI测试框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Espresso"><span class="nav-number">3.</span> <span class="nav-text">Espresso</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍及集成"><span class="nav-number">3.1.</span> <span class="nav-text">介绍及集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EspressoUI测试的重要对象"><span class="nav-number">3.2.</span> <span class="nav-text">EspressoUI测试的重要对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻找View"><span class="nav-number">3.3.</span> <span class="nav-text">寻找View</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ViewMathcer"><span class="nav-number">3.3.1.</span> <span class="nav-text">ViewMathcer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DataInteraction"><span class="nav-number">3.3.2.</span> <span class="nav-text">DataInteraction</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#自定义Matcher"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">自定义Matcher</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对View的操作"><span class="nav-number">3.4.</span> <span class="nav-text">对View的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ViewAction"><span class="nav-number">3.4.1.</span> <span class="nav-text">ViewAction</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#校验结果"><span class="nav-number">3.5.</span> <span class="nav-text">校验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ViewAssertion"><span class="nav-number">3.5.1.</span> <span class="nav-text">ViewAssertion</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步问题"><span class="nav-number">3.6.</span> <span class="nav-text">异步问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IdlingResource"><span class="nav-number">3.7.</span> <span class="nav-text">IdlingResource</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">houyi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2156817"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("A9MMhiDwESwbgaKP2xcHcN6i-gzGzoHsz", "4XmWwxteMRsI9dJKkwiu1iBb");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
