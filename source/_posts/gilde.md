@@ -1,5 +1,5 @@
 [TOC]
-# Glide
+# Glide杂记
 Glide使用过程加载过程主要有如下几个步骤
 * with ReqestManager （Lifecycle，RequestTracker）
 管理关联在同一个Activity（不包括子Activity）或者说关联在统一Fragment上的所有Request
