@@ -1,3 +1,12 @@
+---
+title: Glidle杂记
+date: 2019-07-09 10:18:26
+tags: 
+- Android
+categories: Android
+---
+
+
 [TOC]
 # Glide杂记
 Glide使用过程加载过程主要有如下几个步骤
@@ -25,7 +34,7 @@ Request参数除了我们手动设置的url、placeHolder、transform等参数�
 
 * ModelLoader
 * DataLoadProvider
-* ModelLoader
+* DataFetcher
 
 ## Glide请求过程
 

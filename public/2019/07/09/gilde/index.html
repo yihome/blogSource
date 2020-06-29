@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="yihome" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="[TOC] Glide杂记Glide使用过程加载过程主要有如下几个步骤  with ReqestManager （Lifecycle，RequestTracker）管理关联在同一个Activity（不包括子Activity）或者说关联在统一Fragment上的所有Request load RequestBuilder 设置请求的各种参数，用于创建请求 into Request.begin 开始请求">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Glidle杂记">
+<meta property="og:url" content="http://haojen.github.io/2019/07/09/gilde/index.html">
+<meta property="og:site_name" content="yihome">
+<meta property="og:description" content="[TOC] Glide杂记Glide使用过程加载过程主要有如下几个步骤  with ReqestManager （Lifecycle，RequestTracker）管理关联在同一个Activity（不包括子Activity）或者说关联在统一Fragment上的所有Request load RequestBuilder 设置请求的各种参数，用于创建请求 into Request.begin 开始请求">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://haojen.github.io/2019/07/09/gilde/glide/request.png">
+<meta property="og:updated_time" content="2020-04-23T05:57:08.950Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glidle杂记">
+<meta name="twitter:description" content="[TOC] Glide杂记Glide使用过程加载过程主要有如下几个步骤  with ReqestManager （Lifecycle，RequestTracker）管理关联在同一个Activity（不包括子Activity）或者说关联在统一Fragment上的所有Request load RequestBuilder 设置请求的各种参数，用于创建请求 into Request.begin 开始请求">
+<meta name="twitter:image" content="http://haojen.github.io/2019/07/09/gilde/glide/request.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haojen.github.io/2019/07/09/gilde/"/>
+
+
+
+
+
+  <title>Glidle杂记 | yihome</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yihome</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haojen.github.io/2019/07/09/gilde/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="houyi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yihome">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Glidle杂记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-09T10:18:26+08:00">
+                2019-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/07/09/gilde/" class="leancloud_visitors" data-flag-title="Glidle杂记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h1 id="Glide杂记"><a href="#Glide杂记" class="headerlink" title="Glide杂记"></a>Glide杂记</h1><p>Glide使用过程加载过程主要有如下几个步骤</p>
+<ul>
+<li>with ReqestManager （Lifecycle，RequestTracker）<br>管理关联在同一个Activity（不包括子Activity）或者说关联在统一Fragment上的所有Request</li>
+<li>load RequestBuilder 设置请求的各种参数，用于创建请求</li>
+<li>into Request.begin 开始请求</li>
+</ul>
+<p>总体来说Glide的使用可以分为Request构造和Request运行两个部分</p>
+<h2 id="Reqest构造过程"><a href="#Reqest构造过程" class="headerlink" title="Reqest构造过程"></a>Reqest构造过程</h2><p>Reqest的构造过程主要完成了两件事：</p>
+<ul>
+<li>宿主（Activity、Fragment等）生命周期的绑定</li>
+<li>Request参数的创建的管理</li>
+</ul>
+<h4 id="生命周期绑定"><a href="#生命周期绑定" class="headerlink" title="生命周期绑定"></a>生命周期绑定</h4><p><img src="./glide/request.png" alt="img"></p>
+<h4 id="Request参数设置"><a href="#Request参数设置" class="headerlink" title="Request参数设置"></a>Request参数设置</h4><p>Request参数除了我们手动设置的url、placeHolder、transform等参数之外在创建真正的Request之前还会确定几个重要的策略，这些策略在Glide的不同版本可能会有不同的组合，但整体结构没有太大变化</p>
+<ul>
+<li>ModelLoader</li>
+<li>DataLoadProvider</li>
+<li>ModelLoader</li>
+</ul>
+<h2 id="Glide请求过程"><a href="#Glide请求过程" class="headerlink" title="Glide请求过程"></a>Glide请求过程</h2><p>Glide的请求过程主要分为</p>
+<ul>
+<li>构造请求<ul>
+<li>DrawableTypeRequest</li>
+<li>GifTypeRequest</li>
+<li>BitmapTypeRequest</li>
+</ul>
+</li>
+<li>获取数据源 loadProvider</li>
+<li>加载解码成可用的数据</li>
+<li>显示</li>
+</ul>
+<h3 id="loadProvider"><a href="#loadProvider" class="headerlink" title="loadProvider"></a>loadProvider</h3><p>可扩展的LoaderProvider</p>
+<ul>
+<li>FixedLoadProvider<br>集成了DataLoadProvider、ModelLoader和ResourceTranscoder<ul>
+<li>ModelLoader定义了数据源（从Uri、文件、String等获取原始的输入流或着其封装类）</li>
+<li>DataLoadProvider定义了输入流到目标资源以及缓存文件三者之间的转换关系</li>
+<li>ResourceTranscoder定义了一种资源格式到另一种资源格式（Drawable、Bitmap、gif）的转码方式</li>
+</ul>
+</li>
+<li>ChildLoadProvider</li>
+</ul>
+<h4 id="DataLoadProvider"><a href="#DataLoadProvider" class="headerlink" title="DataLoadProvider"></a>DataLoadProvider</h4><ul>
+<li>DataFetcher获取的数据源(InputSream等)</li>
+<li>目标资源Resourse&lt;?&gt;（Bitmap，Drawable，Gif等）</li>
+<li>File 文件缓存</li>
+</ul>
+<p>预设的DataLoadProvider</p>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">dataLoadProviderRegistry = <span class="keyword">new</span> DataLoadProviderRegistry();</span><br><span class="line"></span><br><span class="line">   StreamBitmapDataLoadProvider streamBitmapLoadProvider =</span><br><span class="line">           <span class="keyword">new</span> StreamBitmapDataLoadProvider(bitmapPool, decodeFormat);</span><br><span class="line">   dataLoadProviderRegistry.register(InputStream.class, Bitmap.class, streamBitmapLoadProvider);</span><br><span class="line"></span><br><span class="line">   FileDescriptorBitmapDataLoadProvider fileDescriptorLoadProvider =</span><br><span class="line">           <span class="keyword">new</span> FileDescriptorBitmapDataLoadProvider(bitmapPool, decodeFormat);</span><br><span class="line">   dataLoadProviderRegistry.register(ParcelFileDescriptor.class, Bitmap.class, fileDescriptorLoadProvider);</span><br><span class="line"></span><br><span class="line">   ImageVideoDataLoadProvider imageVideoDataLoadProvider =</span><br><span class="line">           <span class="keyword">new</span> ImageVideoDataLoadProvider(streamBitmapLoadProvider, fileDescriptorLoadProvider);</span><br><span class="line">   dataLoadProviderRegistry.register(ImageVideoWrapper.class, Bitmap.class, imageVideoDataLoadProvider);</span><br><span class="line"></span><br><span class="line">   GifDrawableLoadProvider gifDrawableLoadProvider =</span><br><span class="line">           <span class="keyword">new</span> GifDrawableLoadProvider(context, bitmapPool);</span><br><span class="line">   dataLoadProviderRegistry.register(InputStream.class, GifDrawable.class, gifDrawableLoadProvider);</span><br><span class="line"></span><br><span class="line">   dataLoadProviderRegistry.register(ImageVideoWrapper.class, GifBitmapWrapper.class,</span><br><span class="line">           <span class="keyword">new</span> ImageVideoGifDrawableLoadProvider(imageVideoDataLoadProvider, gifDrawableLoadProvider, bitmapPool));</span><br><span class="line"></span><br><span class="line">   dataLoadProviderRegistry.register(InputStream.class, File.class, <span class="keyword">new</span> StreamFileDataLoadProvider());</span><br></pre></td></tr></table></figure>
+<h4 id="ModelLoader-装饰者-适配器"><a href="#ModelLoader-装饰者-适配器" class="headerlink" title="ModelLoader 装饰者+适配器"></a>ModelLoader 装饰者+适配器</h4><p>将我们通过load传入的参入转换成特定的DataFetcher<resource>输出（InputStream或者其封装类）<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Glide(Engine engine, MemoryCache memoryCache, BitmapPool bitmapPool, Context context, DecodeFormat decodeFormat) &#123;</span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">//Model class ,Resource class, LoaderFactory</span></span><br><span class="line">    register(File.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorFileLoader.Factory());</span><br><span class="line">    register(File.class, InputStream.class, <span class="keyword">new</span> StreamFileLoader.Factory());</span><br><span class="line">    register(<span class="keyword">int</span>.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorResourceLoader.Factory());</span><br><span class="line">    register(<span class="keyword">int</span>.class, InputStream.class, <span class="keyword">new</span> StreamResourceLoader.Factory());</span><br><span class="line">    register(Integer.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorResourceLoader.Factory());</span><br><span class="line">    register(Integer.class, InputStream.class, <span class="keyword">new</span> StreamResourceLoader.Factory());</span><br><span class="line">    register(String.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorStringLoader.Factory());</span><br><span class="line">    register(String.class, InputStream.class, <span class="keyword">new</span> StreamStringLoader.Factory());</span><br><span class="line">    register(Uri.class, ParcelFileDescriptor.class, <span class="keyword">new</span> FileDescriptorUriLoader.Factory());</span><br><span class="line">    register(Uri.class, InputStream.class, <span class="keyword">new</span> StreamUriLoader.Factory());</span><br><span class="line">    register(URL.class, InputStream.class, <span class="keyword">new</span> StreamUrlLoader.Factory());</span><br><span class="line">    register(GlideUrl.class, InputStream.class, <span class="keyword">new</span> HttpUrlGlideUrlLoader.Factory());</span><br><span class="line">    register(<span class="keyword">byte</span>[].class, InputStream.class, <span class="keyword">new</span> StreamByteArrayLoader.Factory());</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></resource></p>
+<h4 id="DataFetcher-装饰者-适配器"><a href="#DataFetcher-装饰者-适配器" class="headerlink" title="DataFetcher 装饰者+适配器"></a>DataFetcher 装饰者+适配器</h4><p>通过网络或者文件、资源等方式获取数据源</p>
+<h2 id="BitmapPool"><a href="#BitmapPool" class="headerlink" title="BitmapPool"></a>BitmapPool</h2><h3 id="LruPoolStrategy"><a href="#LruPoolStrategy" class="headerlink" title="LruPoolStrategy"></a>LruPoolStrategy</h3><h4 id="SizeConfigStrategy"><a href="#SizeConfigStrategy" class="headerlink" title="SizeConfigStrategy"></a>SizeConfigStrategy</h4><ul>
+<li><code>GroupedLinkedMap&lt;Key, Bitmap&gt; groupedMap</code> 自定义的LruCache，使用链表和HashMap实现</li>
+<li><code>Map&lt;Bitmap.Config, NavigableMap&lt;Integer, Integer&gt;&gt; sortedSizes</code> 以Bitmap的Config为纬度存储了对象池中每种对象大小的数量，用于快速判断是否存在可用的Bitmap对象缓存，这里使用的<code>NavigableMap</code>为<code>TreeMap</code>,key的存储方式为红黑树结构（使用红黑树是因为在复用时可能没有完全大小相同的Bitmap对象，所以会遍历整个map按大小顺序找到第一个比需要的Bitmap大的复用）</li>
+</ul>
+<h2 id="Glide-缓存"><a href="#Glide-缓存" class="headerlink" title="Glide 缓存"></a>Glide 缓存</h2><h3 id="Key的构造"><a href="#Key的构造" class="headerlink" title="Key的构造"></a>Key的构造</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">EngineKey key = keyFactory.buildKey(id, signature, width, height, loadProvider.getCacheDecoder(),</span><br><span class="line">               loadProvider.getSourceDecoder(), transformation, loadProvider.getEncoder(),</span><br><span class="line">               transcoder, loadProvider.getSourceEncoder());</span><br></pre></td></tr></table></figure>
+<p>从EngineKey的构造可以看出，即使是同一个Url下的不同尺寸或者不同的transformation、transcoder，也会产生不同的Key</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>Glide的内存缓存中存在两种内存缓存机制、LruCache（使用LikedHashMap结构存储的强引用内存缓存，默认的缓存大小为两个整屏幕的图片大小）和使用弱引用存储的activeResources</p>
+<ul>
+<li>优先从强引用中获取图片</li>
+<li>其次试图从弱引用中获取图片</li>
+<li>最后再考虑磁盘</li>
+</ul>
+<p>LruCache的大小固定，即使内存情况良好，也不会缓存更多图片，使用弱引用就是为了在内存环境良好的情况下在内存中缓存更多的图片，从而提升缓存的加载速度。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">EngineResource&lt;?&gt; cached = loadFromCache(key, isMemoryCacheable);</span><br><span class="line"><span class="keyword">if</span> (cached != <span class="keyword">null</span>) &#123;</span><br><span class="line">    cb.onResourceReady(cached);</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Loaded resource from cache"</span>, startTime, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EngineResource&lt;?&gt; active = loadFromActiveResources(key, isMemoryCacheable);</span><br><span class="line"><span class="keyword">if</span> (active != <span class="keyword">null</span>) &#123;</span><br><span class="line">    cb.onResourceReady(active);</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Loaded resource from active resources"</span>, startTime, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EngineJob current = jobs.get(key);</span><br><span class="line"><span class="keyword">if</span> (current != <span class="keyword">null</span>) &#123;</span><br><span class="line">    current.addCallback(cb);</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Added to existing load"</span>, startTime, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> LoadStatus(cb, current);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">EngineJob engineJob = engineJobFactory.build(key, isMemoryCacheable);</span><br><span class="line">DecodeJob&lt;T, Z, R&gt; decodeJob = <span class="keyword">new</span> DecodeJob&lt;T, Z, R&gt;(key, width, height, fetcher, loadProvider, transformation,</span><br><span class="line">        transcoder, diskCacheProvider, diskCacheStrategy, priority);</span><br><span class="line">EngineRunnable runnable = <span class="keyword">new</span> EngineRunnable(engineJob, decodeJob, priority);</span><br><span class="line">jobs.put(key, engineJob);</span><br><span class="line">engineJob.addCallback(cb);</span><br><span class="line">engineJob.start(runnable);</span><br></pre></td></tr></table></figure>
+<p>代码中可以看出从内存缓存中获取Resource文件时，只使用原始的EngineKey，这样获取的Resource时是指定宽高且经过Transform和transcoder转换后的，由此也可以看出，内存缓存中只会有经过各种转换之后的图片资源</p>
+<h3 id="磁盘缓存过程"><a href="#磁盘缓存过程" class="headerlink" title="磁盘缓存过程"></a>磁盘缓存过程</h3><p>在无法从内存中获取指定的图片资源之后，会尝试从磁盘或者网络获取，这个过程在<code>EngineRunnable</code>中完成<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Resource&lt;?&gt; decode() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="keyword">if</span> (isDecodingFromCache()) &#123;</span><br><span class="line">        <span class="keyword">return</span> decodeFromCache();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> decodeFromSource();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Resource&lt;?&gt; decodeFromCache() <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Resource&lt;?&gt; result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            result = decodeJob.decodeResultFromCache();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Log.isLoggable(TAG, Log.DEBUG)) &#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"Exception decoding result from cache: "</span> + e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">            result = decodeJob.decodeSourceFromCache();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当从磁盘缓存中获取图片时会有两个过程</p>
+<ol>
+<li>试图使用完整的EngineKey（包括宽、高、Transform和transcoder）获取指定的文件，当然DataLoadProvider只提供从File到指定中间资源类型的转化，这里从磁盘获取资源之后还是会使用transcoder进行转化</li>
+<li>当无法通过完整的EngineKey获取到资源时，会尝试使用OriginalKey获取资源，OriginalKey只包含请求id和签名，只能查找原始没有经过任何大小或者其他转换前的资源文件<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Resource&lt;Z&gt; <span class="title">decodeSourceFromCache</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!diskCacheStrategy.cacheSource()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> startTime = LogTime.getLogTime();</span><br><span class="line">    Resource&lt;T&gt; decoded = loadFromCache(resultKey.getOriginalKey());</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Decoded source from cache"</span>, startTime);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> transformEncodeAndTranscode(decoded);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> Resource&lt;Z&gt; <span class="title">transformEncodeAndTranscode</span><span class="params">(Resource&lt;T&gt; decoded)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> startTime = LogTime.getLogTime();</span><br><span class="line">    Resource&lt;T&gt; transformed = transform(decoded);</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Transformed resource from source"</span>, startTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    writeTransformedToCache(transformed);</span><br><span class="line"></span><br><span class="line">    startTime = LogTime.getLogTime();</span><br><span class="line">    Resource&lt;Z&gt; result = transcode(transformed);</span><br><span class="line">    <span class="keyword">if</span> (Log.isLoggable(TAG, Log.VERBOSE)) &#123;</span><br><span class="line">        logWithTimeAndKey(<span class="string">"Transcoded transformed from source"</span>, startTime);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在第二次尝试从磁盘获取资源成功后会先通过transform来对中间的资源类型进行转换后，并把转换后同时宽高以及变换的图片写入磁盘缓存，最后进行transcode</p>
+<h3 id="网络请求"><a href="#网络请求" class="headerlink" title="网络请求"></a>网络请求</h3><p>在无法通过磁盘缓存获取到数据时，会进入一个异常处理流程，同时会判断异常是否是由于磁盘没有文件导致的<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">onLoadFailed</span><span class="params">(Exception e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (isDecodingFromCache()) &#123;</span><br><span class="line">        stage = Stage.SOURCE;</span><br><span class="line">        manager.submitForSource(<span class="keyword">this</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        manager.onException(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="纵观全局"><a href="#纵观全局" class="headerlink" title="纵观全局"></a>纵观全局</h2><p>在整个Glide的源码阅读过程中最大的印象就是缓存，图片有LRUcache，weakRefence、DiskLruCache，key有KeyPool，Bitmap有BitmapPool，ModelLoader有ModelLoaderCache</p>
+<p>其次就是</p>
+<h1 id="储备知识"><a href="#储备知识" class="headerlink" title="储备知识"></a>储备知识</h1><h3 id="ReferenceQueue"><a href="#ReferenceQueue" class="headerlink" title="ReferenceQueue"></a>ReferenceQueue</h3><ul>
+<li>FinalReference</li>
+<li>SoftReference</li>
+<li>WeakReference</li>
+<li>PhantomReference</li>
+</ul>
+<p>ReferenceQueue 主要适用于追踪后三种引用类型的被系统回收的情况，可以作为构造入参传入他们的构造函数中，系统会自动把被系统回收的对象添加到这个<code>ReferenceQueue</code>中。</p>
+<figure class="highlight plain"><figcaption><span>```</span></figcaption><table><tr><td class="code"><pre><span class="line">```cpp</span><br><span class="line">collector::GcType Heap::CollectGarbageInternal(collector::GcType gc_type,</span><br><span class="line">                                               GcCause gc_cause,</span><br><span class="line">                                               bool clear_soft_references) &#123;</span><br><span class="line">  Thread* self = Thread::Current();</span><br><span class="line">  Runtime* runtime = Runtime::Current();</span><br><span class="line">  // If the heap can&apos;t run the GC, silently fail and return that no GC was run.</span><br><span class="line">  .....GC过程</span><br><span class="line">  // Enqueue cleared references.</span><br><span class="line">  reference_processor_-&gt;EnqueueClearedReferences(self);</span><br><span class="line">  // Grow the heap so that we know when to perform the next GC.</span><br><span class="line">  GrowForUtilization(collector, bytes_allocated_before_gc);</span><br><span class="line">  LogGC(gc_cause, collector);</span><br><span class="line">  FinishGC(self, gc_type);</span><br><span class="line">  // Inform DDMS that a GC completed.</span><br><span class="line">  Dbg::GcDidFinish();</span><br><span class="line">  ......</span><br><span class="line">  return gc_type;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Android系统GC完成时会调用<code>ReferenceProcessor::EnqueueClearedReferences</code>来把回收掉的引用放入引用队列中。</p>
+<figure class="highlight plain"><figcaption><span>```</span></figcaption><table><tr><td class="code"><pre><span class="line">```cpp</span><br><span class="line">void ReferenceProcessor::EnqueueClearedReferences(Thread* self) &#123;</span><br><span class="line">  Locks::mutator_lock_-&gt;AssertNotHeld(self);</span><br><span class="line">  // When a runtime isn&apos;t started there are no reference queues to care about so ignore.</span><br><span class="line">  if (!cleared_references_.IsEmpty()) &#123;</span><br><span class="line">    if (LIKELY(Runtime::Current()-&gt;IsStarted())) &#123;</span><br><span class="line">      jobject cleared_references;</span><br><span class="line">      &#123;</span><br><span class="line">        ReaderMutexLock mu(self, *Locks::mutator_lock_);</span><br><span class="line">        cleared_references = self-&gt;GetJniEnv()-&gt;vm-&gt;AddGlobalRef(</span><br><span class="line">            self, cleared_references_.GetList());</span><br><span class="line">      &#125;</span><br><span class="line">      if (kAsyncReferenceQueueAdd) &#123;</span><br><span class="line">        // TODO: This can cause RunFinalization to terminate before newly freed objects are</span><br><span class="line">        // finalized since they may not be enqueued by the time RunFinalization starts.</span><br><span class="line">        Runtime::Current()-&gt;GetHeap()-&gt;GetTaskProcessor()-&gt;AddTask(</span><br><span class="line">            self, new ClearedReferenceTask(cleared_references));</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        ClearedReferenceTask task(cleared_references);</span><br><span class="line">        task.Run(self);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cleared_references_.Clear();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ReferenceProcessor</code>主要通过<code>Thread</code>对象获取了回收的引用对象，创建了一个<code>ClearedReferenceTask</code>，这个task就是真正把回收的对象放入引用队列的方法</p>
+<figure class="highlight plain"><figcaption><span>```</span></figcaption><table><tr><td class="code"><pre><span class="line">```cpp</span><br><span class="line">class ClearedReferenceTask : public HeapTask &#123;</span><br><span class="line"> public:</span><br><span class="line">  explicit ClearedReferenceTask(jobject cleared_references)</span><br><span class="line">      : HeapTask(NanoTime()), cleared_references_(cleared_references) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  virtual void Run(Thread* thread) &#123;</span><br><span class="line">    ScopedObjectAccess soa(thread);</span><br><span class="line">    jvalue args[1];</span><br><span class="line">    args[0].l = cleared_references_;</span><br><span class="line">    InvokeWithJValues(soa, nullptr, WellKnownClasses::java_lang_ref_ReferenceQueue_add, args);</span><br><span class="line">    soa.Env()-&gt;DeleteGlobalRef(cleared_references_);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> private:</span><br><span class="line">  const jobject cleared_references_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>ClearedReferenceTask</code>主要作用就是回调Java层方法的相应方法</p>
+<figure class="highlight plain"><figcaption><span>```</span></figcaption><table><tr><td class="code"><pre><span class="line">```java</span><br><span class="line">static void add(Reference&lt;?&gt; list) &#123;</span><br><span class="line">    synchronized (ReferenceQueue.class) &#123;</span><br><span class="line">        if (unenqueued == null) &#123;</span><br><span class="line">            unenqueued = list;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // Find the last element in unenqueued.</span><br><span class="line">            Reference&lt;?&gt; last = unenqueued;</span><br><span class="line">            while (last.pendingNext != unenqueued) &#123;</span><br><span class="line">              last = last.pendingNext;</span><br><span class="line">            &#125;</span><br><span class="line">            // Add our list to the end. Update the pendingNext to point back to enqueued.</span><br><span class="line">            last.pendingNext = list;</span><br><span class="line">            last = list;</span><br><span class="line">            while (last.pendingNext != list) &#123;</span><br><span class="line">                last = last.pendingNext;</span><br><span class="line">            &#125;</span><br><span class="line">            last.pendingNext = unenqueued;</span><br><span class="line">        &#125;</span><br><span class="line">        ReferenceQueue.class.notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止，被回收的对象已经回到java层的<code>ReferenceQueue</code> 中，但是只是作为静态变量存储了，并没有进入相应的引用队列中，这个就得说起另外一个东西了,Deamons守护线程<br><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> Runtime::Start() &#123;</span><br><span class="line">    .....</span><br><span class="line">    StartDaemonThreads();</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Runtime::StartDaemonThreads() &#123;</span><br><span class="line">    <span class="function">ScopedTrace <span class="title">trace</span><span class="params">(__FUNCTION__)</span></span>;</span><br><span class="line">    VLOG(startup) &lt;&lt; <span class="string">"Runtime::StartDaemonThreads entering"</span>;</span><br><span class="line"></span><br><span class="line">    Thread* self = Thread::Current();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Must be in the kNative state for calling native methods.</span></span><br><span class="line">    CHECK_EQ(self-&gt;GetState(), kNative);</span><br><span class="line"></span><br><span class="line">    JNIEnv* env = self-&gt;GetJniEnv();</span><br><span class="line">    env-&gt;CallStaticVoidMethod(WellKnownClasses::java_lang_Daemons,</span><br><span class="line">                            WellKnownClasses::java_lang_Daemons_start);</span><br><span class="line">    <span class="keyword">if</span> (env-&gt;ExceptionCheck()) &#123;</span><br><span class="line">        env-&gt;ExceptionDescribe();</span><br><span class="line">        LOG(FATAL) &lt;&lt; <span class="string">"Error starting java.lang.Daemons"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    VLOG(startup) &lt;&lt; <span class="string">"Runtime::StartDaemonThreads exiting"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Android Runtime的start方法中会调用一个<code>StartDaemonThreads</code>方法，最终会调用到java层<code>Daemons.start</code>方法。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//引用队列守护线程</span></span><br><span class="line">    ReferenceQueueDaemon.INSTANCE.start();</span><br><span class="line">    <span class="comment">//析构守护线程</span></span><br><span class="line">    FinalizerDaemon.INSTANCE.start();</span><br><span class="line">    <span class="comment">//析构监护守护线程</span></span><br><span class="line">    FinalizerWatchdogDaemon.INSTANCE.start();</span><br><span class="line">    <span class="comment">//守护堆任务线程</span></span><br><span class="line">    HeapTaskDaemon.INSTANCE.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Daemons中有好几个守护线程，我们主要关注的是<code>ReferenceQueueDaemon</code>引用队列守护线程<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runInternal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (isRunning()) &#123;</span><br><span class="line">        Reference&lt;?&gt; list;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ReferenceQueue.class) &#123;</span><br><span class="line">                <span class="keyword">while</span> (ReferenceQueue.unenqueued == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    ReferenceQueue.class.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                list = ReferenceQueue.unenqueued;</span><br><span class="line">                ReferenceQueue.unenqueued = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (OutOfMemoryError e) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ReferenceQueue.enqueuePending(list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>ReferenceQueueDaemon.runInternal</code>方法中会获取前面GC后存入<code>ReferenceQueue.unenqueued</code>然后把引用分别放入每个<code>ReferenceQueue</code>中，Over！</p>
+<h3 id="MessageQueue"><a href="#MessageQueue" class="headerlink" title="MessageQueue"></a>MessageQueue</h3><p>MessageQueue用于Handle机制中传递消息，但是在Handle机制中我们关注的是<code>MessageQueue.next</code>方法的前半部分,<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">Message <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        ......</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="comment">//get Message and return</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// If first time idle, then get the number of idlers to run.</span></span><br><span class="line">            <span class="comment">// Idle handles only run if the queue is empty or if the first message</span></span><br><span class="line">            <span class="comment">// in the queue (possibly a barrier) is due to be handled in the future.</span></span><br><span class="line">            <span class="keyword">if</span> (pendingIdleHandlerCount &lt; <span class="number">0</span></span><br><span class="line">                    &amp;&amp; (mMessages == <span class="keyword">null</span> || now &lt; mMessages.when)) &#123;</span><br><span class="line">                pendingIdleHandlerCount = mIdleHandlers.size();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (pendingIdleHandlerCount &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// No idle handlers to run.  Loop and wait some more.</span></span><br><span class="line">                mBlocked = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (mPendingIdleHandlers == <span class="keyword">null</span>) &#123;</span><br><span class="line">                mPendingIdleHandlers = <span class="keyword">new</span> IdleHandler[Math.max(pendingIdleHandlerCount, <span class="number">4</span>)];</span><br><span class="line">            &#125;</span><br><span class="line">            mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Run the idle handlers.</span></span><br><span class="line">        <span class="comment">// We only ever reach this code block during the first iteration.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pendingIdleHandlerCount; i++) &#123;</span><br><span class="line">            <span class="keyword">final</span> IdleHandler idler = mPendingIdleHandlers[i];</span><br><span class="line">            mPendingIdleHandlers[i] = <span class="keyword">null</span>; <span class="comment">// release the reference to the handler</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">boolean</span> keep = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                keep = idler.queueIdle();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                Log.wtf(TAG, <span class="string">"IdleHandler threw exception"</span>, t);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!keep) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                    mIdleHandlers.remove(idler);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Reset the idle handler count to 0 so we do not run them again.</span></span><br><span class="line">        pendingIdleHandlerCount = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// While calling an idle handler, a new message could have been delivered</span></span><br><span class="line">        <span class="comment">// so go back and look again for a pending message without waiting.</span></span><br><span class="line">        nextPollTimeoutMillis = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面段代码就是在通过<code>next</code>没有获取到下一条<code>Message</code>时运行，整段代码整体就是一个观察者默认，其它对象可以注策<code>IdleHandler</code>到<code>MessageQueue</code>中，当<code>MessageQueue</code>中没有消息时则会调用<code>IdleHandler</code>的<code>queueIdle</code>方法。</p>
+<p>什么时候<code>MessageQueue</code>为空？</p>
+<ul>
+<li>对于主线层来说，当页面渲染完成且没有新的交互时<code>MessageQueue</code>才会为空。</li>
+<li>对于子线程，连续操作之后会有</li>
+</ul>
+<p>目前Glide使用<code>IdleHandler</code>来进行弱引用缓存key的清理</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/16/Handler解析/" rel="next" title="Handler解析">
+                <i class="fa fa-chevron-left"></i> Handler解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/27/记一次网络请求全过程/" rel="prev" title="记一次网络请求全过程">
+                记一次网络请求全过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="uyan_frame"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="houyi" />
+            
+              <p class="site-author-name" itemprop="name">houyi</p>
+              <p class="site-description motion-element" itemprop="description">侯易在 Github 上的个人博客</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yihome" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yihome92628@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Glide杂记"><span class="nav-number">1.</span> <span class="nav-text">Glide杂记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reqest构造过程"><span class="nav-number">1.1.</span> <span class="nav-text">Reqest构造过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生命周期绑定"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">生命周期绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Request参数设置"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">Request参数设置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Glide请求过程"><span class="nav-number">1.2.</span> <span class="nav-text">Glide请求过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#loadProvider"><span class="nav-number">1.2.1.</span> <span class="nav-text">loadProvider</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DataLoadProvider"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">DataLoadProvider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ModelLoader-装饰者-适配器"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">ModelLoader 装饰者+适配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DataFetcher-装饰者-适配器"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">DataFetcher 装饰者+适配器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BitmapPool"><span class="nav-number">1.3.</span> <span class="nav-text">BitmapPool</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LruPoolStrategy"><span class="nav-number">1.3.1.</span> <span class="nav-text">LruPoolStrategy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SizeConfigStrategy"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">SizeConfigStrategy</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Glide-缓存"><span class="nav-number">1.4.</span> <span class="nav-text">Glide 缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Key的构造"><span class="nav-number">1.4.1.</span> <span class="nav-text">Key的构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.4.2.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘缓存过程"><span class="nav-number">1.4.3.</span> <span class="nav-text">磁盘缓存过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络请求"><span class="nav-number">1.4.4.</span> <span class="nav-text">网络请求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#纵观全局"><span class="nav-number">1.5.</span> <span class="nav-text">纵观全局</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#储备知识"><span class="nav-number">2.</span> <span class="nav-text">储备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ReferenceQueue"><span class="nav-number">2.0.1.</span> <span class="nav-text">ReferenceQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MessageQueue"><span class="nav-number">2.0.2.</span> <span class="nav-text">MessageQueue</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">houyi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2156817"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("A9MMhiDwESwbgaKP2xcHcN6i-gzGzoHsz", "4XmWwxteMRsI9dJKkwiu1iBb");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
